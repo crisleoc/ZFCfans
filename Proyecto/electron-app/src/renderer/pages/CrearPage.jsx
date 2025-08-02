@@ -19,7 +19,7 @@ function CrearPage() {
     // Información básica
     name: '',
     description: '',
-    difficulty: 'fácil',
+    difficulty: 'muy fácil',
     glass_type: '',
     garnish: '',
     serving_suggestion: '',

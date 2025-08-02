@@ -39,6 +39,8 @@ function createWindow() {
 
   if (process.env.NODE_ENV === 'development') {
     win.loadURL('http://localhost:5173');
+    // Abrir DevTools automáticamente en desarrollo
+    win.webContents.openDevTools();
   } else {
     win.loadFile('dist/renderer/index.html');
   }

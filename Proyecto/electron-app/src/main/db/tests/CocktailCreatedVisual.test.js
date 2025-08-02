@@ -15,7 +15,7 @@ const cocktails = [
     name: 'Piña Colada',
     description: 'Cóctel tropical cremoso',
     img_url: 'pina_colada.jpg',
-    difficulty: 'medio',
+    difficulty: 'media',
     is_alcoholic: 1,
   },
   {
@@ -52,7 +52,7 @@ describe('CocktailCreatedVisual - legibilidad en la aplicación', () => {
   });
 
   test('la dificultad se muestra correctamente', () => {
-    const allowed = ['fácil', 'medio', 'difícil'];
+    const allowed = ['muy fácil', 'fácil', 'media', 'difícil', 'muy difícil'];
     cocktails.forEach(cocktail => {
       expect(allowed).toContain(cocktail.difficulty);
     });

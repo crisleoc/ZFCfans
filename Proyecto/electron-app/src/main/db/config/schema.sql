@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS cocktails (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT UNIQUE NOT NULL,
     img_url TEXT,
-    difficulty TEXT NOT NULL CHECK (difficulty IN ('fácil', 'media', 'difícil')),
+    difficulty TEXT NOT NULL CHECK (difficulty IN ('muy fácil', 'fácil', 'media', 'difícil', 'muy difícil')),
     description TEXT,
     additional_notes TEXT,
     preparation_time INTEGER CHECK (preparation_time > 0), -- en minutos
@@ -112,7 +112,7 @@ CREATE TABLE IF NOT EXISTS preparation_history (
     score INTEGER DEFAULT 0 CHECK (score BETWEEN 0 AND 5),
     comment TEXT,
     preparation_time INTEGER CHECK (preparation_time > 0), -- tiempo real de preparación en minutos
-    difficulty_experienced TEXT CHECK (difficulty_experienced IN ('fácil', 'media', 'difícil')),
+    difficulty_experienced TEXT CHECK (difficulty_experienced IN ('muy fácil', 'fácil', 'media', 'difícil', 'muy difícil')),
     would_make_again INTEGER DEFAULT 1 CHECK (would_make_again IN (0, 1)),
     created_at TEXT DEFAULT (datetime('now'))
 );

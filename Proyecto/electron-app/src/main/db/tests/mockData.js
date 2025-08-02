@@ -156,6 +156,66 @@ export const mockCocktails = [
     id_pairing: 2,
     created_at: '2025-01-03 16:45:00',
   },
+  {
+    id: 4,
+    name: 'Agua con Gas y Limón',
+    description: 'Bebida refrescante muy simple',
+    difficulty: 'muy fácil',
+    preparation_time: 1,
+    servings: 1,
+    alcohol_content: 0.0,
+    glass_type: 'highball',
+    is_alcoholic: 0,
+    img_url: 'https://example.com/agua_limon.jpg',
+    id_creator: 1,
+    id_pairing: 3,
+    created_at: '2025-01-04 09:15:00',
+  },
+  {
+    id: 5,
+    name: 'Margarita Clásica',
+    description: 'Cóctel mexicano que requiere técnica moderada',
+    difficulty: 'media',
+    preparation_time: 7,
+    servings: 1,
+    alcohol_content: 20.0,
+    glass_type: 'margarita',
+    is_alcoholic: 1,
+    img_url: 'https://example.com/margarita.jpg',
+    id_creator: 1,
+    id_pairing: 3,
+    created_at: '2025-01-05 18:00:00',
+  },
+  {
+    id: 6,
+    name: 'Negroni',
+    description: 'Cóctel italiano con técnicas de mezclado específicas',
+    difficulty: 'difícil',
+    preparation_time: 5,
+    servings: 1,
+    alcohol_content: 25.0,
+    glass_type: 'rocks',
+    is_alcoholic: 1,
+    img_url: 'https://example.com/negroni.jpg',
+    id_creator: 2,
+    id_pairing: 1,
+    created_at: '2025-01-06 19:30:00',
+  },
+  {
+    id: 7,
+    name: 'Ramos Gin Fizz',
+    description: 'Cóctel clásico que requiere técnica avanzada de batido',
+    difficulty: 'muy difícil',
+    preparation_time: 15,
+    servings: 1,
+    alcohol_content: 22.0,
+    glass_type: 'collins',
+    is_alcoholic: 1,
+    img_url: 'https://example.com/ramos_gin_fizz.jpg',
+    id_creator: 2,
+    id_pairing: 4,
+    created_at: '2025-01-07 20:30:00',
+  },
 ];
 
 // Datos base para notificaciones
@@ -334,8 +394,11 @@ export function createMockDatabase() {
       normalizedQuery.includes('group by difficulty')
     ) {
       const stats = [
+        { difficulty: 'muy fácil', count: 1 },
         { difficulty: 'fácil', count: 2 },
-        { difficulty: 'medio', count: 1 },
+        { difficulty: 'media', count: 1 },
+        { difficulty: 'difícil', count: 1 },
+        { difficulty: 'muy difícil', count: 1 },
       ];
       return createMockStatement(stats);
     }
@@ -345,7 +408,7 @@ export function createMockDatabase() {
       normalizedQuery.includes('alcohol_content > 0')
     ) {
       return {
-        get: vi.fn(() => ({ count: 2 })),
+        get: vi.fn(() => ({ count: 5 })),
         all: vi.fn(() => []),
         run: vi.fn(() => ({ changes: 1, lastInsertRowid: 1 })),
       };

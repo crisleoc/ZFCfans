@@ -1,26 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 @import 'tailwindcss';
 
-/* Base styles */
-body {
-  font-family: 'Inter', sans-serif;
-  background-color: #f9f6f2;
-  margin: 0;
-  padding: 0;
-}
+@layer base {
+  body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f9f6f2;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 
-button {
-  @apply transition-colors duration-200;
-}
-
-button:hover {
-  cursor: pointer;
-}
-
-/* Asegurar que antialiased funcione */
-.antialiased {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  button:hover {
+    cursor: pointer;
+  }
 }
 
 /* Custom scrollbar */
@@ -44,34 +37,47 @@ button:hover {
 
 /* Component styles */
 @layer components {
-  .tag-aperitivo {
-    @apply bg-orange-100 text-orange-700;
-  }
-
-  .tag-digestivo {
-    @apply bg-blue-100 text-blue-700;
-  }
-
-  .tag-dulce {
-    @apply bg-yellow-100 text-yellow-800;
-  }
-
-  /* Button hover effects */
   .btn-primary {
-    @apply bg-orange-500 text-white hover:bg-orange-600 transition-colors duration-200;
+    background-color: #c05621;
+    color: white;
+    transition: colors 200ms;
+  }
+
+  .btn-primary:hover {
+    background-color: #ea580c;
   }
 
   .btn-secondary {
-    @apply bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400 transition-colors duration-200;
+    background-color: white;
+    border: 1px solid #d1d5db;
+    color: #374151;
+    transition: colors 200ms;
   }
 
-  /* Card hover effects */
+  .btn-secondary:hover {
+    background-color: #f9fafb;
+    border-color: #9ca3af;
+  }
+
   .cocktail-card {
-    @apply bg-white rounded-2xl p-5 shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100;
+    background-color: white;
+    border-radius: 1rem;
+    padding: 1.25rem;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    transition: all 300ms;
+    border: 1px solid #f3f4f6;
   }
 
-  /* Focus states */
-  .focus-ring {
-    @apply focus:outline-none focus:ring-2 focus:ring-orange-300 focus:ring-offset-1;
+  .cocktail-card:hover {
+    box-shadow:
+      0 10px 15px -3px rgb(0 0 0 / 0.1),
+      0 4px 6px -4px rgb(0 0 0 / 0.1);
+  }
+
+  .focus-ring:focus {
+    outline: none;
+    box-shadow:
+      0 0 0 2px #fdba74,
+      0 0 0 1px white;
   }
 }

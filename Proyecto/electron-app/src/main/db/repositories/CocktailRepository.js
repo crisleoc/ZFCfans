@@ -353,7 +353,7 @@ class CocktailRepository extends BaseRepository {
         c.name,
         c.description,
         c.difficulty,
-        c.preparation_time,
+        c.preparation_time AS tiempo_preparacion,
         c.alcohol_content,
         c.img_url,
         GROUP_CONCAT(cat.name, ', ') AS categorias
@@ -378,7 +378,7 @@ class CocktailRepository extends BaseRepository {
         c.name,
         c.description,
         c.difficulty,
-        c.preparation_time,
+        c.preparation_time AS tiempo_preparacion,
         c.alcohol_content,
         c.img_url,
         c.id_creator,
@@ -483,7 +483,7 @@ class CocktailRepository extends BaseRepository {
         c.img_url AS imagen,
         c.difficulty,
         c.description AS descripcion,
-        c.preparation_time,
+        c.preparation_time AS tiempo_preparacion,
         c.alcohol_content,
         r.glass_type,
         GROUP_CONCAT(DISTINCT cat.name) AS categorias
@@ -555,14 +555,40 @@ class CocktailRepository extends BaseRepository {
 
     // Orden especial para búsqueda por texto (relevancia)
     if (search && search.trim()) {
-      query += `
-        ORDER BY 
-          CASE WHEN c.name LIKE ? THEN 1 ELSE 2 END,
-          c.${safeSortBy} ${safeSortOrder}
-      `;
+      if (safeSortBy === 'difficulty') {
+        query += `
+          ORDER BY 
+            CASE WHEN c.name LIKE ? THEN 1 ELSE 2 END,
+            CASE c.difficulty 
+              WHEN 'muy fácil' THEN 1
+              WHEN 'fácil' THEN 2  
+              WHEN 'media' THEN 3
+              WHEN 'difícil' THEN 4
+              WHEN 'muy difícil' THEN 5
+              ELSE 6
+            END ${safeSortOrder}
+        `;
+      } else {
+        query += `
+          ORDER BY 
+            CASE WHEN c.name LIKE ? THEN 1 ELSE 2 END,
+            c.${safeSortBy} ${safeSortOrder}
+        `;
+      }
       params.push(`${search.trim()}%`);
     } else {
-      query += ` ORDER BY c.${safeSortBy} ${safeSortOrder}`;
+      if (safeSortBy === 'difficulty') {
+        query += ` ORDER BY CASE c.difficulty 
+          WHEN 'muy fácil' THEN 1
+          WHEN 'fácil' THEN 2  
+          WHEN 'media' THEN 3
+          WHEN 'difícil' THEN 4
+          WHEN 'muy difícil' THEN 5
+          ELSE 6
+        END ${safeSortOrder}`;
+      } else {
+        query += ` ORDER BY c.${safeSortBy} ${safeSortOrder}`;
+      }
     }
 
     const stmt = this.db.prepare(query);
@@ -587,7 +613,7 @@ class CocktailRepository extends BaseRepository {
         c.img_url AS imagen,
         c.difficulty,
         c.description AS descripcion,
-        c.preparation_time,
+        c.preparation_time AS tiempo_preparacion,
         COUNT(DISTINCT ing.id) as matching_ingredients,
         GROUP_CONCAT(DISTINCT cat.name) AS categorias
       FROM cocktails c
@@ -663,7 +689,7 @@ class CocktailRepository extends BaseRepository {
         c.img_url AS imagen,
         c.difficulty,
         c.description AS descripcion,
-        c.preparation_time,
+        c.preparation_time AS tiempo_preparacion,
         GROUP_CONCAT(DISTINCT cat.name) AS categorias,
         CASE 
     `;

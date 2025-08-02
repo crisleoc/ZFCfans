@@ -7,11 +7,16 @@ const Descripcion = ({ name, image, difficulty, preparationTime, glassType }) =>
 
   // Mapeo de dificultades a colores
   const difficultyColors = {
+    'muy fácil': 'bg-emerald-100 text-emerald-800',
+    'muy facil': 'bg-emerald-100 text-emerald-800',
     fácil: 'bg-green-100 text-green-800',
+    facil: 'bg-green-100 text-green-800',
     media: 'bg-yellow-100 text-yellow-800',
     medio: 'bg-yellow-100 text-yellow-800',
-    difícil: 'bg-red-100 text-red-800',
-    dificil: 'bg-red-100 text-red-800',
+    difícil: 'bg-orange-100 text-orange-800',
+    dificil: 'bg-orange-100 text-orange-800',
+    'muy difícil': 'bg-red-100 text-red-800',
+    'muy dificil': 'bg-red-100 text-red-800',
   };
 
   const difficultyColor =

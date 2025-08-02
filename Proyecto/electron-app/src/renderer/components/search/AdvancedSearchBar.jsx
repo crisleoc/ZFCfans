@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { CloseIcon, SearchIcon } from '../icons/Icons';
 
 function AdvancedSearchBar({
-  placeholder = 'Buscar cócteles, ingredientes o categorías...',
+  placeholder,
   onSearch,
   onSuggestionSelect,
   suggestions = [],
@@ -104,6 +104,19 @@ function AdvancedSearchBar({
     [showSuggestions, suggestions, selectedSuggestionIndex, handleSuggestionClick, handleSubmit],
   );
 
+  // Hacer scroll automático cuando cambia la selección
+  useEffect(() => {
+    if (selectedSuggestionIndex >= 0 && suggestionsRef.current) {
+      const suggestionElement = suggestionsRef.current.children[selectedSuggestionIndex];
+      if (suggestionElement) {
+        suggestionElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+        });
+      }
+    }
+  }, [selectedSuggestionIndex]);
+
   // Cerrar sugerencias al hacer clic fuera
   useEffect(() => {
     const handleClickOutside = event => {
@@ -154,21 +167,21 @@ function AdvancedSearchBar({
             disabled={loading}
           />
 
-          {/* Botón de limpiar */}
-          {searchTerm && (
-            <button
-              type="button"
-              onClick={clearSearch}
-              className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600 transition-colors"
-            >
-              <CloseIcon className="h-5 w-5" />
-            </button>
-          )}
-
-          {loading && (
+          {/* Botón de limpiar o indicador de carga */}
+          {loading ? (
             <div className="absolute inset-y-0 right-0 flex items-center pr-3">
               <div className="animate-spin rounded-full h-4 w-4 border-2 border-gray-300 border-t-orange-500" />
             </div>
+          ) : (
+            searchTerm && (
+              <button
+                type="button"
+                onClick={clearSearch}
+                className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <CloseIcon className="h-5 w-5" />
+              </button>
+            )
           )}
         </div>
 

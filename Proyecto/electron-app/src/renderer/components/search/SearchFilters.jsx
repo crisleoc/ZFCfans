@@ -1,34 +1,73 @@
 import { useCallback, useEffect, useState } from 'react';
 import { CloseIcon, FilterIcon } from '../icons/Icons';
 import FilterDropdown from '../common/FilterDropdown';
+import CategoryController from '../../controllers/CategoryController';
 
 function SearchFilters({ onFiltersChange, onClear, className = '', initialFilters = {} }) {
   const [filters, setFilters] = useState({
     difficulty: '',
     category: '',
     isAlcoholic: '',
-    sortBy: 'name',
-    sortOrder: 'ASC',
+    sortBy: '',
+    sortOrder: '',
     ...initialFilters,
   });
 
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [categoryOptions, setCategoryOptions] = useState([]);
+  const [loadingCategories, setLoadingCategories] = useState(true);
 
   // Opciones para los filtros
   const difficultyOptions = [
+    { value: 'muy fácil', label: 'Muy Fácil' },
     { value: 'fácil', label: 'Fácil' },
-    { value: 'medio', label: 'Medio' },
+    { value: 'media', label: 'Media' },
     { value: 'difícil', label: 'Difícil' },
+    { value: 'muy difícil', label: 'Muy Difícil' },
   ];
 
-  const categoryOptions = [
-    { value: 'aperitivo', label: 'Aperitivo' },
-    { value: 'digestivo', label: 'Digestivo' },
-    { value: 'dulce', label: 'Dulce' },
-    { value: 'tropical', label: 'Tropical' },
-    { value: 'clásico', label: 'Clásico' },
-    { value: 'sin alcohol', label: 'Sin Alcohol' },
-  ];
+  // Cargar categorías desde la base de datos
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        setLoadingCategories(true);
+
+        const categories = await CategoryController.getAll();
+
+        // Filtrar categorías que no sean "Favoritos" y formatear para el dropdown
+        const formattedCategories = categories
+          .filter(cat => cat.name !== 'Favoritos')
+          .map(cat => ({
+            value: cat.name.toLowerCase(),
+            label: cat.name,
+            isSystem: cat.is_system || false,
+            color: cat.color || null,
+          }))
+          .sort((a, b) => {
+            // Primero las categorías del sistema, luego las personalizadas
+            if (a.isSystem && !b.isSystem) {
+              return -1;
+            }
+            if (!a.isSystem && b.isSystem) {
+              return 1;
+            }
+            return a.label.localeCompare(b.label);
+          });
+
+        // eslint-disable-next-line no-console
+        console.log('✅ Categorías formateadas:', formattedCategories);
+        setCategoryOptions(formattedCategories);
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('❌ Error loading categories:', error);
+        setCategoryOptions([]);
+      } finally {
+        setLoadingCategories(false);
+      }
+    };
+
+    loadCategories();
+  }, []);
 
   const alcoholOptions = [
     { value: 'true', label: 'Con Alcohol' },
@@ -84,8 +123,8 @@ function SearchFilters({ onFiltersChange, onClear, className = '', initialFilter
       difficulty: '',
       category: '',
       isAlcoholic: '',
-      sortBy: 'name',
-      sortOrder: 'ASC',
+      sortBy: '',
+      sortOrder: '',
     };
     setFilters(clearedFilters);
 
@@ -95,13 +134,7 @@ function SearchFilters({ onFiltersChange, onClear, className = '', initialFilter
   }, [onClear]);
 
   // Verificar si hay filtros activos
-  const hasActiveFilters = Object.entries(filters).some(([key, value]) => {
-    if (key === 'sortBy' && value === 'name') {
-      return false;
-    }
-    if (key === 'sortOrder' && value === 'ASC') {
-      return false;
-    }
+  const hasActiveFilters = Object.entries(filters).some(([_key, value]) => {
     return value !== '' && value !== null && value !== undefined;
   });
 
@@ -140,7 +173,7 @@ function SearchFilters({ onFiltersChange, onClear, className = '', initialFilter
       </div>
 
       {/* Filtros básicos */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 items-start">
         <FilterDropdown
           placeholder="Dificultad"
           options={difficultyOptions}
@@ -149,10 +182,13 @@ function SearchFilters({ onFiltersChange, onClear, className = '', initialFilter
         />
 
         <FilterDropdown
-          placeholder="Categoría"
+          placeholder={loadingCategories ? 'Cargando categorías...' : 'Categoría'}
           options={categoryOptions}
           value={filters.category}
           onChange={value => handleFilterChange('category', value)}
+          disabled={loadingCategories}
+          showColors={true}
+          showSystemBadges={true}
         />
 
         <FilterDropdown
@@ -168,7 +204,7 @@ function SearchFilters({ onFiltersChange, onClear, className = '', initialFilter
       {/* Filtros avanzados */}
       {showAdvanced && (
         <div className="mt-4 pt-4 border-t border-gray-200">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
             <FilterDropdown
               placeholder="Ordenar por"
               options={sortOptions}
@@ -207,7 +243,7 @@ function SearchFilters({ onFiltersChange, onClear, className = '', initialFilter
                   {filters.isAlcoholic ? 'Con alcohol' : 'Sin alcohol'}
                 </span>
               )}
-              {filters.sortBy !== 'name' && (
+              {filters.sortBy && (
                 <span className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">
                   Orden: {sortOptions.find(opt => opt.value === filters.sortBy)?.label}
                 </span>

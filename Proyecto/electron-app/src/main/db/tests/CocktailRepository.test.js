@@ -29,14 +29,14 @@ describe('CocktailRepository', () => {
     it('debería obtener todos los cócteles', () => {
       const result = repository.findAll();
       expect(result).toEqual(mockCocktails);
-      expect(result).toHaveLength(3);
+      expect(result).toHaveLength(7);
     });
 
     it('debería crear un nuevo cóctel', () => {
       const newCocktail = {
         name: 'Piña Colada',
         description: 'Cóctel tropical cremoso',
-        difficulty: 'medio',
+        difficulty: 'media',
         preparation_time: 8,
         servings: 1,
         alcohol_content: 18.0,
@@ -54,7 +54,7 @@ describe('CocktailRepository', () => {
     it('debería actualizar un cóctel existente', () => {
       const updates = {
         description: 'Descripción actualizada del mojito',
-        difficulty: 'medio',
+        difficulty: 'media',
       };
 
       const result = repository.update(1, updates);
@@ -136,7 +136,7 @@ describe('CocktailRepository', () => {
       expect(Array.isArray(result)).toBe(true);
     });
     it('debería manejar diferentes niveles de dificultad', () => {
-      const difficulties = ['fácil', 'medio', 'difícil'];
+      const difficulties = ['muy fácil', 'fácil', 'media', 'difícil', 'muy difícil'];
 
       difficulties.forEach(difficulty => {
         const _result = repository.findByDifficulty(difficulty);

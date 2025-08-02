@@ -51,7 +51,7 @@ describe('CocktailBDCreated - almacenamiento en base de datos', () => {
   test('debería almacenar varios cócteles y devolver IDs únicos', () => {
     const cocktails = [
       { name: 'Mojito', difficulty: 'fácil', preparation_time: 5 },
-      { name: 'Piña Colada', difficulty: 'medio', preparation_time: 8 },
+      { name: 'Piña Colada', difficulty: 'media', preparation_time: 8 },
       { name: 'Negroni', difficulty: 'difícil', preparation_time: 3 },
     ];
     const ids = cocktails.map(data => repository.create(data));
@@ -79,7 +79,7 @@ describe('CocktailBDCreated - almacenamiento en base de datos', () => {
 
   test('debería almacenar cócteles con diferentes dificultades', () => {
     const easy = { name: 'Spritz', difficulty: 'fácil' };
-    const medium = { name: 'Martini', difficulty: 'medio' };
+    const medium = { name: 'Martini', difficulty: 'media' };
     const hard = { name: 'Zombie', difficulty: 'difícil' };
     expect(repository.create(easy)).toBeGreaterThan(0);
     expect(repository.create(medium)).toBeGreaterThan(0);

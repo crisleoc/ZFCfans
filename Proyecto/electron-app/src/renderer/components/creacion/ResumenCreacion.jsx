@@ -19,9 +19,11 @@ function ResumenCreacion({ data, onSubmit, isSubmitting }) {
   const isComplete = name && difficulty && ingredients.length > 0 && instructions.length > 0;
 
   const difficultyLabels = {
+    'muy fácil': 'Muy Fácil',
     fácil: 'Fácil',
-    medio: 'Medio',
+    media: 'Media',
     difícil: 'Difícil',
+    'muy difícil': 'Muy Difícil',
   };
 
   const glassLabels = {

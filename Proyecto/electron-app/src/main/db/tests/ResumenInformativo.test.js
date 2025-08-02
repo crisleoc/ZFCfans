@@ -26,7 +26,7 @@ describe('CocktailRepository – métodos para ResumenInformativo', () => {
     describe(`Iteración #${run}`, () => {
       describe('getDifficulty', () => {
         it('debería devolver la dificultad del cóctel por su ID', () => {
-          const mockStatement = { get: vi.fn(() => ({ difficulty: 'Medio' })) };
+          const mockStatement = { get: vi.fn(() => ({ difficulty: 'media' })) };
           mockDb.prepare.mockReturnValue(mockStatement);
 
           const result = repository.getDifficulty(42);
@@ -35,7 +35,7 @@ describe('CocktailRepository – métodos para ResumenInformativo', () => {
             'SELECT difficulty FROM cocktails WHERE id = ?',
           );
           expect(mockStatement.get).toHaveBeenCalledWith(42);
-          expect(result).toBe('Medio');
+          expect(result).toBe('media');
         });
       });
 

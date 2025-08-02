@@ -44,6 +44,7 @@ export function insertInitialCocktails(db, force = false) {
         'https://assets.tmecosys.com/image/upload/t_web_rdp_recipe_584x480/img/recipe/ras/Assets/3A602C62-7F02-4773-ACB2-7603622A3A19/Derivates/5133B835-49A1-4C2C-80EC-74E01842249C.jpg',
       difficulty: 'fácil',
       description: 'Refrescante aperitivo italiano con Aperol y Prosecco',
+      alcohol_content: 11.0,
       category_name: 'aperitivo',
       recipe: {
         glass_type: 'stemmed_balloon_glass',
@@ -67,8 +68,9 @@ export function insertInitialCocktails(db, force = false) {
       name: 'Piña Colada',
       img_url:
         'https://assets.tmecosys.com/image/upload/t_web_rdp_recipe_584x480_1_5x/img/recipe/ras/Assets/A9467000-4182-4A69-802E-6A36234604C1/Derivates/9cca3d9b-727b-4d23-b633-71dcd23125da.jpg',
-      difficulty: 'fácil',
+      difficulty: 'muy fácil',
       description: 'Tropical y cremoso cóctel caribeño con ron y coco',
+      alcohol_content: 12.5,
       category_name: 'dulce',
       recipe: {
         glass_type: 'hurricane_glass',
@@ -95,6 +97,7 @@ export function insertInitialCocktails(db, force = false) {
       img_url: 'https://th.bing.com/th/id/OIP.vYIymbjbJdADafbswXH__gAAAA?rs=1&pid=ImgDetMain',
       difficulty: 'media',
       description: 'Clásico cóctel americano con whisky y vermut',
+      alcohol_content: 28.0,
       category_name: 'digestivo',
       recipe: {
         glass_type: 'coupe_glass',
@@ -118,6 +121,7 @@ export function insertInitialCocktails(db, force = false) {
       img_url: 'https://placehold.co/192x192/E2E8F0/4A5568?text=Mojito',
       difficulty: 'fácil',
       description: 'Clásico cóctel cubano con menta, miel y lima',
+      alcohol_content: 13.0,
       category_name: 'aperitivo',
       recipe: {
         glass_type: 'highball_glass',
@@ -145,8 +149,9 @@ export function insertInitialCocktails(db, force = false) {
     {
       name: 'Test: Cóctel Completo',
       img_url: 'https://images.unsplash.com/photo-1544145945-f90425340c7e?w=300&h=300&fit=crop',
-      difficulty: 'difícil',
+      difficulty: 'muy difícil',
       description: 'Cóctel de prueba con TODOS los datos completos para testing',
+      alcohol_content: 25.0,
       category_name: 'digestivo',
       recipe: {
         glass_type: 'coupe_glass',
@@ -242,6 +247,7 @@ export function insertInitialCocktails(db, force = false) {
       img_url: '', // Imagen vacía para probar fallback
       difficulty: 'fácil',
       description: 'Prueba del sistema de imagen por defecto cuando no hay URL',
+      alcohol_content: 0.0,
       category_name: 'aperitivo',
       recipe: {
         glass_type: 'highball_glass',
@@ -263,6 +269,7 @@ export function insertInitialCocktails(db, force = false) {
       img_url: 'https://images.unsplash.com/photo-1536935338788-846bb9981813?w=300&h=300&fit=crop',
       difficulty: 'media',
       description: 'Cóctel para probar UI cuando NO hay pasos de preparación',
+      alcohol_content: 15.0,
       category_name: 'dulce',
       recipe: {
         glass_type: 'martini_glass',
@@ -282,6 +289,7 @@ export function insertInitialCocktails(db, force = false) {
       img_url: 'https://images.unsplash.com/photo-1544145945-f90425340c7e?w=300&h=300&fit=crop',
       difficulty: 'media',
       description: 'Cóctel para probar UI cuando NO hay lista de ingredientes',
+      alcohol_content: 18.0,
       category_name: 'digestivo',
       recipe: {
         glass_type: 'rocks_glass',
@@ -311,6 +319,7 @@ export function insertInitialCocktails(db, force = false) {
       img_url: null, // null para probar otro caso de fallback
       difficulty: 'fácil', // Sin badge especial, pero valor válido
       description: 'Cóctel con datos mínimos para probar todos los fallbacks',
+      alcohol_content: 0.0,
       category_name: 'aperitivo',
       recipe: {
         // Solo datos mínimos
@@ -323,6 +332,7 @@ export function insertInitialCocktails(db, force = false) {
       img_url: 'https://placehold.co/192x192/E2E8F0/4A5568?text=Margarita',
       difficulty: 'media',
       description: 'Cóctel mexicano refrescante con tequila, triple sec y lima',
+      alcohol_content: 19.0,
       category_name: 'aperitivo',
       recipe: {
         glass_type: 'cocktail_glass',
@@ -350,6 +360,7 @@ export function insertInitialCocktails(db, force = false) {
       img_url: 'https://placehold.co/192x192/E2E8F0/4A5568?text=Old+Fashioned',
       difficulty: 'media',
       description: 'Cóctel clásico con bourbon, azúcar y bitters',
+      alcohol_content: 30.0,
       category_name: 'digestivo',
       recipe: {
         glass_type: 'old_fashioned_glass',
@@ -399,8 +410,8 @@ export function insertInitialCocktails(db, force = false) {
 
   // 3. Preparar statements para inserción eficiente
   const insertCategory = db.prepare(`
-    INSERT OR IGNORE INTO categories (name, description, id_owner)
-    VALUES (?, ?, ?)
+    INSERT OR IGNORE INTO categories (name, description, color, id_owner)
+    VALUES (?, ?, ?, ?)
   `);
 
   const getCategoryId = db.prepare(`
@@ -408,8 +419,8 @@ export function insertInitialCocktails(db, force = false) {
   `);
 
   const insertCocktailStmt = db.prepare(`
-    INSERT INTO cocktails (name, img_url, difficulty, description, preparation_time, id_owner)
-    VALUES (?, ?, ?, ?, ?, ?)
+    INSERT INTO cocktails (name, img_url, difficulty, description, preparation_time, alcohol_content, id_owner)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
   `);
 
   const insertCocktailCategory = db.prepare(`
@@ -430,14 +441,29 @@ export function insertInitialCocktails(db, force = false) {
     VALUES (?, ?, ?, ?, ?)
   `);
 
+  // 7. Mapeo de colores para categorías comunes
+  const categoryColors = {
+    aperitivo: '#F97316', // orange-500
+    digestivo: '#DC2626', // red-600
+    dulce: '#EAB308', // yellow-500
+    tropical: '#10B981', // emerald-500
+    clásico: '#6366F1', // indigo-500
+    'sin alcohol': '#8B5CF6', // violet-500
+    moderno: '#EC4899', // pink-500
+    cremoso: '#F59E0B', // amber-500
+    refrescante: '#06B6D4', // cyan-500
+  };
+
   // 8. Crear categorías únicas
   const categorySet = new Set(cocktails.map(c => c.category_name));
   categorySet.forEach(cat => {
-    insertCategory.run(cat, `Categoría de ${cat}`, demoUserId);
+    const color = categoryColors[cat.toLowerCase()] || '#6B7280'; // gray-500 por defecto
+    insertCategory.run(cat, `Categoría de ${cat}`, color, demoUserId);
   });
 
   for (const categoryName of categorySet) {
-    insertCategory.run(categoryName, `Categoría de ${categoryName}`, demoUserId);
+    const color = categoryColors[categoryName.toLowerCase()] || '#6B7280';
+    insertCategory.run(categoryName, `Categoría de ${categoryName}`, color, demoUserId);
     // eslint-disable-next-line no-console
     console.log(`📁 Categoría creada: ${categoryName}`);
   }
@@ -450,6 +476,7 @@ export function insertInitialCocktails(db, force = false) {
       c.difficulty,
       c.description,
       c.recipe?.preparation_time || null,
+      c.alcohol_content || 0.0,
       demoUserId,
     );
 

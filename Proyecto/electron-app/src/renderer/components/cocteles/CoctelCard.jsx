@@ -13,13 +13,10 @@ function CoctelCard({ coctel }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const {
-    nombre,
-    imagen,
-    id,
-    difficulty = 'fácil',
-    preparation_time: preparationTime = 5,
-  } = coctel;
+  const { nombre, imagen, id, difficulty = 'fácil', tiempo_preparacion } = coctel;
+
+  // Manejar valores NULL/undefined para preparation time
+  const preparationTime = tiempo_preparacion ?? 5;
 
   const loadCocktailData = useCallback(async () => {
     try {
@@ -44,12 +41,16 @@ function CoctelCard({ coctel }) {
   const getDifficultyStars = difficulty => {
     let stars = 1;
     switch (difficulty?.toLowerCase()) {
+      case 'muy fácil':
+      case 'muy facil':
+        stars = 1;
+        break;
       case 'fácil':
       case 'facil':
         stars = 2;
         break;
-      case 'medio':
       case 'media':
+      case 'medio':
         stars = 3;
         break;
       case 'difícil':
@@ -73,18 +74,15 @@ function CoctelCard({ coctel }) {
   };
 
   const getCategoryStyle = categoria => {
-    switch (categoria?.toLowerCase()) {
-      case 'aperitivo':
-        return 'bg-orange-100 text-orange-700 border-orange-200';
-      case 'digestivo':
-        return 'bg-red-100 text-red-800 border-red-200';
-      case 'dulce':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'favoritos':
-        return 'bg-pink-100 text-pink-700 border-pink-200';
-      default:
-        return 'bg-gray-100 text-gray-700 border-gray-200';
+    if (categoria.color) {
+      return {
+        backgroundColor: `${categoria.color}1A`, // 10% opacity
+        color: categoria.color,
+        borderColor: `${categoria.color}4D`, // 30% opacity
+      };
     }
+
+    return {};
   };
 
   const handleFavoriteToggle = async e => {
@@ -146,15 +144,23 @@ function CoctelCard({ coctel }) {
 
           {/* Categories - scrollable */}
           {displayCategories.length > 0 && (
-            <div className="flex flex-wrap justify-center gap-2 mb-4 max-h-16 overflow-y-auto">
-              {displayCategories.map(categoria => (
-                <span
-                  key={categoria.id}
-                  className={`inline-block text-xs font-medium px-2 py-1 rounded-full border ${getCategoryStyle(categoria.name)}`}
-                >
-                  {categoria.name}
-                </span>
-              ))}
+            <div className="flex flex-wrap justify-center gap-2 mb-4 max-h-16 overflow-y-auto capitalize">
+              {displayCategories.map(categoria => {
+                const categoryStyle = getCategoryStyle(categoria);
+                const hasCustomColor = categoria.color;
+
+                return (
+                  <span
+                    key={categoria.id}
+                    className={`inline-block text-xs font-medium px-2 py-1 rounded-full border ${
+                      hasCustomColor ? '' : 'bg-gray-100 text-gray-700 border-gray-200'
+                    }`}
+                    style={hasCustomColor ? categoryStyle : {}}
+                  >
+                    {categoria.name}
+                  </span>
+                );
+              })}
             </div>
           )}
 

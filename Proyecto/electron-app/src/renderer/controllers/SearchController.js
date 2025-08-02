@@ -170,7 +170,17 @@ class SearchController {
     }
 
     // Validar dificultad
-    const validDifficulties = ['fácil', 'facil', 'medio', 'media', 'difícil', 'dificil'];
+    const validDifficulties = [
+      'muy fácil',
+      'muy facil',
+      'fácil',
+      'facil',
+      'media',
+      'difícil',
+      'dificil',
+      'muy difícil',
+      'muy dificil',
+    ];
     if (filters.difficulty && validDifficulties.includes(filters.difficulty.toLowerCase())) {
       validFilters.difficulty = filters.difficulty;
     }

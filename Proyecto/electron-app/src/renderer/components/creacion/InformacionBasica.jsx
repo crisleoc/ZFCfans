@@ -10,9 +10,11 @@ function InformacionBasica({ data, onChange }) {
   );
 
   const difficultyOptions = [
+    { value: 'muy fácil', label: 'Muy Fácil', description: 'Mezclar y servir' },
     { value: 'fácil', label: 'Fácil', description: 'Sin técnicas especiales' },
-    { value: 'medio', label: 'Medio', description: 'Requiere algunas técnicas' },
+    { value: 'media', label: 'Media', description: 'Requiere algunas técnicas' },
     { value: 'difícil', label: 'Difícil', description: 'Técnicas avanzadas' },
+    { value: 'muy difícil', label: 'Muy Difícil', description: 'Técnicas profesionales' },
   ];
 
   const glassOptions = [
